@@ -1,0 +1,56 @@
+{
+  "name": "backend-interview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Mini e-commerce backend — TypeScript + Express 5 + Apollo Server v5 + Prisma + Postgres",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@10.11.1",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/index.js --packages=external --sourcemap",
+    "start": "node --env-file-if-exists=.env --enable-source-maps dist/index.js",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:generate": "dotenv -e .env -- prisma generate",
+    "db:migrate": "dotenv -e .env -- prisma migrate dev",
+    "db:migrate:deploy": "dotenv -e .env -- prisma migrate deploy",
+    "db:studio": "dotenv -e .env -- prisma studio"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma"
+    ]
+  },
+  "dependencies": {
+    "@apollo/server": "^5.5.0",
+    "@as-integrations/express5": "^1.1.2",
+    "@graphql-tools/merge": "^9.1.9",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "graphql": "^16.13.2",
+    "graphql-tag": "^2.12.6",
+    "pg": "^8.20.0",
+    "zod": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.0",
+    "@types/pg": "^8.20.0",
+    "dotenv-cli": "^11.0.0",
+    "esbuild": "^0.28.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  }
+}

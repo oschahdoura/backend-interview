@@ -1,0 +1,10 @@
+// Prisma schema — main file (generator + datasource)
+// Models live in prisma/models/*.prisma — Prisma auto-merges all .prisma files.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
