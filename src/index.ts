@@ -1,6 +1,7 @@
 import express from 'express';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { unwrapResolverError } from '@apollo/server/errors';
 import { expressMiddleware } from '@as-integrations/express5';
 import { GraphQLTypeDefs, GraphQLResolvers } from './graphql/graphql';
 import { env } from '../env';
@@ -15,6 +16,21 @@ const apolloServer = new ApolloServer({
     resolvers: GraphQLResolvers,
     introspection: env.NODE_ENV !== 'production',
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    formatError: (formatted, error) => {
+      if (env.NODE_ENV === 'production') return formatted;
+
+      const thrown = unwrapResolverError(error);
+      const cause = thrown instanceof Error ? thrown.cause : undefined;
+      if (cause === undefined) return formatted;
+
+      return {
+        ...formatted,
+        extensions: {
+          ...formatted.extensions,
+          cause: cause instanceof Error ? `${cause.name}: ${cause.message}` : String(cause),
+        },
+      };
+    },
   });
 
 const bootstrapServer = async () => {
