@@ -1,0 +1,9 @@
+model Product {
+    id          String  @id
+    imageUrl    String
+    name        String
+    price       Float
+    quantity    Int
+
+    @@map("products")
+}
